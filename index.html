@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf6e9">
+  <meta name="description" content="Boo gửi bạn một lá thư nhân dịp sinh nhật hai tuổi. Vuốt mở thư để tìm từ khóa cho ô chữ.">
+  <meta property="og:title" content="Bạn có thư từ Boo!">
+  <meta property="og:description" content="Một lá thư dành cho người chơi ô chữ mừng sinh nhật Boo 2 tuổi.">
+  <title>Bạn có thư từ Boo! · Sinh nhật 2 tuổi</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #183d4a;
+      --muted: #46616a;
+      --red: #a63832;
+      --paper: #fbf6e9;
+      --serif: "Baskervville", "Iowan Old Style", "Palatino Linotype", "Palatino", Georgia, "Noto Serif", serif;
+      --sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --type: "Courier Prime", "Courier New", monospace;
+      --opening: 1700ms;
+      --mail-stripe: repeating-linear-gradient(123deg, #a74941 0 0.75rem, #f5ecd7 0.75rem 1.25rem, #426776 1.25rem 2rem, #f5ecd7 2rem 2.5rem);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { min-height: 100%; }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background-color: var(--paper);
+      background-image: radial-gradient(ellipse at 50% 41%, #fffaf080 0%, transparent 64%),
+        repeating-linear-gradient(0deg, #684e2b06 0 1px, transparent 1px 4px),
+        radial-gradient(#77532816 0.65px, transparent 0.85px);
+      background-size: auto, auto, 5px 5px;
+    }
+    button { font: inherit; }
+    button:focus-visible, [tabindex="-1"]:focus-visible { outline: 3px solid #1d5568; outline-offset: 6px; }
+    [hidden] { display: none !important; }
+    .sr-only {
+      position: absolute; inline-size: 1px; block-size: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+    }
+    .page {
+      min-height: 100vh;
+      min-height: 100svh;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .masthead {
+      width: min(calc(100% - 3rem), 62rem);
+      margin: 0 auto;
+      min-height: clamp(4rem, 9vh, 5.3rem);
+      padding-block: max(.5rem, env(safe-area-inset-top)) .45rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #31525b3b;
+    }
+    .brand {
+      color: var(--red);
+      font: bold italic 2.5rem/.98 var(--serif);
+      letter-spacing: -.085em;
+      padding-right: .12em;
+    }
+    .occasion { display: flex; align-items: center; gap: .7rem; font: bold .94rem/1.35 var(--type); }
+    .tiles { display: grid; grid-template-columns: repeat(3, .42rem); grid-template-rows: repeat(2, .42rem); }
+    .tiles i { border: 1px solid #395e68; margin: 0 -1px -1px 0; }
+    .tiles i:first-child { grid-column: 2; background: #395e68; }
+    .tiles i:nth-child(2) { grid-row: 2; }
+    main {
+      position: relative;
+      width: min(100%, 75rem);
+      margin: auto;
+      padding: clamp(1.85rem, 5.2vh, 3.8rem) 1.1rem max(1.8rem, env(safe-area-inset-bottom));
+      text-align: center;
+    }
+    .eyebrow, .card-label, .address small {
+      font: bold .82rem/1.4 var(--type);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin: 0; color: var(--red); display: flex; align-items: center; justify-content: center; gap: .8rem; }
+    .eyebrow::before, .eyebrow::after { content: ""; width: 1.7rem; height: 1px; background: currentColor; opacity: .65; }
+    h1 {
+      margin: .42rem 0 .45rem;
+      font: 500 clamp(3.25rem, 8vw, 5.45rem)/1.13 var(--serif);
+      letter-spacing: -.06em;
+    }
+    h1 em { color: var(--red); font-weight: 500; }
+    .intro { margin: 0 auto; max-width: 32rem; color: var(--muted); font-size: 1.03rem; line-height: 1.55; text-wrap: pretty; }
+    .puzzle-scrap {
+      position: absolute; width: 10rem; aspect-ratio: 1; z-index: -1;
+      color: #315f6822;
+      background-image: linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px);
+      background-size: 20% 20%;
+      clip-path: polygon(0 20%, 40% 20%, 40% 0, 60% 0, 60% 20%, 100% 20%, 100% 41%, 80% 41%, 80% 80%, 60% 80%, 60% 61%, 20% 61%, 20% 100%, 0 100%);
+    }
+    .puzzle-scrap::before { content: ""; position: absolute; left: 40%; top: 20%; width: 20%; height: 20%; background: currentColor; }
+    .scrap-left { top: 47%; left: 2.5%; transform: rotate(-10deg); }
+    .scrap-right { top: 26%; right: 2.5%; transform: rotate(13deg) scale(.78); }
+
+    /* The envelope and the letter share one stage so the paper can slide out of the pocket. */
+    .desk {
+      width: min(87%, 31rem);
+      aspect-ratio: 1.8 / 1;
+      position: relative;
+      margin: clamp(2.8rem, 6.5vh, 4rem) auto clamp(2.35rem, 5.9vh, 3.8rem);
+      touch-action: pan-y pinch-zoom;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    [data-state="closed"] .desk { cursor: grab; }
+    [data-state="closed"] .desk.dragging { cursor: grabbing; }
+    .mail {
+      position: absolute; inset: 0;
+      transform: translateX(var(--pull, 0px)) rotate(calc(-3deg + var(--tilt, 0deg)));
+      transition: transform 210ms ease-out;
+    }
+    .dragging .mail { transition: none; }
+    [data-state="opening"] .mail, [data-state="open"] .mail { transform: none; }
+    .sleeve, .pocket-wrap, .lid-carrier { position: absolute; inset: 0; pointer-events: none; }
+    .sleeve {
+      z-index: 1; border-radius: 4px;
+      background: linear-gradient(155deg, #547681, #96b5ba 50%, #98b9be);
+      border: 1px solid #7a9ba1;
+      box-shadow: 0 2px 3px #263d4333, 2px 13px 17px -8px #283d474f, 6px 30px 44px -16px #6c615147;
+    }
+    .packet-grain {
+      background-image: repeating-linear-gradient(2deg, #fff7e20c 0 1px, transparent 1px 3px),
+        radial-gradient(#48687522 .5px, transparent .8px);
+      background-size: auto, 3px 4px;
+    }
+    .pocket-wrap { z-index: 3; }
+    .pocket {
+      position: absolute; inset: 0; overflow: hidden; border-radius: 4px;
+      background-color: #bdd4d6;
+      clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+    }
+    .pocket::before {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(101deg, #a6c5c8, #d3e2dc 49.8%, #9fbfc6);
+      clip-path: polygon(0 0, 51% 60%, 0 99%);
+    }
+    .pocket::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(256deg, #adc9cf, #d7e5df);
+      clip-path: polygon(100% 0, 49% 60%, 100% 99%);
+    }
+    .bottom-fold {
+      position: absolute; inset: 0;
+      clip-path: polygon(0 98%, 47.8% 38.1%, 52.2% 38.1%, 100% 98%, 100% 100%, 0 100%);
+      border-radius: 0 0 4px 4px;
+      background: #89a8ae;
+    }
+    .bottom-fold::after {
+      content: ""; position: absolute; inset: 1.7px 0 0;
+      clip-path: polygon(0 98%, 48% 38.1%, 52% 38.1%, 100% 98%, 100% 100%, 0 100%);
+      background: repeating-linear-gradient(4deg, #fff8e520 0 1px, transparent 1px 3px),
+        linear-gradient(170deg, #b4cfd3, #cbddda 77%, #c0d5d3);
+    }
+    .stripe {
+      position: absolute; inset: auto 0 0; height: 3.2%; border-radius: 0 0 4px 4px;
+      background: var(--mail-stripe); opacity: .77;
+    }
+    .address { position: absolute; left: 6.8%; bottom: 11%; text-align: left; color: #2f5460; transform: rotate(-3deg); }
+    .address small { display: block; font-size: clamp(.65rem, 2.3vw, .78rem); }
+    .address b { display: block; font: italic 600 clamp(1.05rem, 4vw, 1.62rem)/1.23 var(--serif); letter-spacing: -.035em; }
+
+    /* A two-candle postage stamp and ink cancellation, drawn entirely from paper shapes. */
+    .stamp {
+      position: absolute; width: 14.9%; aspect-ratio: .81;
+      right: 6.6%; bottom: 10.8%; transform: rotate(7deg);
+      background: #fff2d5; color: #9f3e37;
+      --perforations: linear-gradient(#000 0 0) center / calc(100% - 8px) calc(100% - 8px) no-repeat,
+        radial-gradient(circle at 4px 0, transparent 2.1px, #000 2.5px) top left / 8px 4px repeat-x,
+        radial-gradient(circle at 4px 100%, transparent 2.1px, #000 2.5px) bottom left / 8px 4px repeat-x,
+        radial-gradient(circle at 0 4px, transparent 2.1px, #000 2.5px) left top / 4px 8px repeat-y,
+        radial-gradient(circle at 100% 4px, transparent 2.1px, #000 2.5px) right top / 4px 8px repeat-y;
+      -webkit-mask: var(--perforations); mask: var(--perforations);
+    }
+    .stamp-art { position: absolute; inset: 9%; border: 1px solid currentColor; background: #f5d9bd; }
+    .stamp-art::before, .stamp-art::after { content: "✦"; position: absolute; top: 11%; font: .55rem/1 Georgia, serif; }
+    .stamp-art::before { left: 7%; }
+    .stamp-art::after { right: 7%; top: 23%; font-size: .43rem; }
+    .cake {
+      position: absolute; width: 62%; height: 28%; left: 19%; bottom: 25%;
+      border: 1.5px solid currentColor; border-radius: 45% 45% 15% 15% / 18% 18% 13% 13%;
+      background: repeating-linear-gradient(90deg, #faecd0 0 3px, #eebca4 3px 5px);
+    }
+    .cake::before { content: ""; position: absolute; left: -5%; right: -5%; height: 45%; top: -1px; border: 1px solid currentColor; border-radius: 50%; background: #fff1cc; }
+    .cake::after { content: ""; position: absolute; left: -17%; right: -17%; bottom: -4px; height: 3px; border: 1px solid currentColor; border-radius: 50%; }
+    .candle { position: absolute; bottom: 91%; width: 13%; height: 73%; background: repeating-linear-gradient(136deg, #a3473e 0 2px, #f7e6bb 2px 4px); border: 1px solid currentColor; }
+    .candle:first-child { left: 26%; }
+    .candle:last-child { right: 23%; }
+    .candle::before { content: ""; position: absolute; width: 140%; height: 55%; bottom: calc(100% + 1px); left: -15%; border-radius: 90% 10% 70% 30%; background: currentColor; transform: rotate(-12deg); }
+    .stamp-title { position: absolute; bottom: 2%; left: 0; right: 0; font: bold italic clamp(.63rem, 1.8vw, .83rem)/1.2 var(--serif); }
+    .postmark {
+      position: absolute; width: 13%; aspect-ratio: 1; bottom: 15.2%; right: 16.6%;
+      border: 1.5px solid #4c7077; border-radius: 50%; color: #365d68; opacity: .67;
+      transform: rotate(-15deg);
+      display: grid; place-items: center;
+    }
+    .postmark::before { content: ""; position: absolute; inset: 7%; border: 1px dashed currentColor; border-radius: 50%; }
+    .postmark span { font: italic bold clamp(.9rem, 3.7vw, 1.55rem)/1 var(--serif); }
+    .cancel-lines {
+      position: absolute; right: 26%; bottom: 20%; width: 9%; height: 7%; opacity: .45;
+      transform: rotate(-9deg); border-block: 1px solid #416670;
+    }
+    .cancel-lines::after { content: ""; position: absolute; inset: 48% 0 auto; border-top: 1px solid #416670; }
+
+    .lid-carrier { z-index: 4; perspective: 1000px; }
+    .lid { position: absolute; inset: 0 0 auto; height: 61.5%; transform-origin: center top; }
+    .lid-paper { position: absolute; inset: 0; filter: drop-shadow(0 2px 1px #2a484d48); }
+    .lid-paper::before, .lid-paper::after {
+      content: ""; position: absolute; inset: 0;
+      clip-path: polygon(0 0,100% 0,100% 2%,52.4% 96.9%,50% 99%,47.6% 96.9%,0 2%);
+    }
+    .lid-paper::before { background: #7799a0; }
+    .lid-paper::after {
+      bottom: 1.5px; background: repeating-linear-gradient(3deg, #fffae11f 0 1px, transparent 1px 3px),
+        linear-gradient(160deg, #d4e4df 0%, #c3dada 58%, #b5cdd0 100%);
+    }
+    .seal {
+      position: absolute; left: 50%; top: 92%; width: 16%; aspect-ratio: 1.02;
+      transform: translate(-50%,-50%) rotate(7deg);
+      display: grid; place-items: center;
+      color: #f2b39d;
+      border-radius: 46% 54% 48% 52% / 50% 43% 57% 50%;
+      background: radial-gradient(ellipse at 34% 26%, #e89675 0%, #c86050 24%, transparent 52%),
+        linear-gradient(137deg, #d9785f, #a63c34 56%, #813028 84%, #bb5b4c);
+      box-shadow: inset 1px 2px 3px #f7b294b3, inset -2px -3px 2px #6e292ac9, 0 3px 1px #69332b88, 1px 6px 8px #384a4654;
+      container-type: inline-size;
+    }
+    .seal::before { content: ""; position: absolute; inset: 12%; border-radius: 50% 47% 49% 47%; border: 1.3px solid #8e3a32; box-shadow: -1px -1px 1px #f1a087, inset 1px 1px 1px #d57a63, 1px 1px 1px #ec9479; }
+    .seal span { font: bold italic clamp(1.6rem, 6vw, 2.8rem)/1 var(--serif); font-size: 56cqi; text-shadow: 0 -1px 1px #82382f, 0 1.5px 0 #9e473a; transform: translate(-3%,-4%); }
+
+    .letter-slot { position: absolute; z-index: 2; inset: 0; pointer-events: none; perspective: 1100px; }
+    .paper-turn {
+      position: absolute; inset: 0;
+      -webkit-transform-style: preserve-3d; transform-style: preserve-3d;
+    }
+    .paper-face {
+      position: absolute; inset: 0; border-radius: 4px;
+      -webkit-backface-visibility: hidden; backface-visibility: hidden;
+      box-shadow: 0 1px 3px #334c5045, 0 12px 25px -10px #50452f47;
+    }
+    .paper-front {
+      background-color: #dce8e1;
+      background-image: repeating-linear-gradient(0deg, #55778328 0 1px, transparent 1px 12px),
+        repeating-linear-gradient(90deg, #55778328 0 1px, transparent 1px 12px);
+      display: grid; place-items: center;
+      color: #41616b; font: bold italic clamp(2rem, 9vw, 4rem)/1 var(--serif); letter-spacing: -.08em;
+      transform: translateZ(1px);
+    }
+    .paper-back {
+      transform: rotateY(180deg) translateZ(1px); color: var(--ink);
+      background-color: #fff9e8;
+      background-image: repeating-linear-gradient(2deg, #7b59300a 0 1px, transparent 1px 4px);
+      display: grid; place-items: center; padding: 5% 6%;
+    }
+    .paper-back::before { content: ""; position: absolute; inset: 4.2% 2.7%; border: 1px solid #bd8472; border-radius: 2px; pointer-events: none; }
+    .paper-back::after {
+      content: ""; position: absolute; inset: auto 4.8% 0; height: 5px;
+      background: var(--mail-stripe); opacity: .72;
+    }
+    .card-content { position: relative; display: grid; justify-items: center; gap: clamp(.32rem, 1.1vw, .75rem); }
+    .card-label { color: var(--muted); margin: 0; }
+    .keyword {
+      margin: 0; color: var(--red);
+      font: bold clamp(1.75rem, 7.9vw, 3.55rem)/1.15 var(--serif);
+      letter-spacing: -.035em; white-space: nowrap;
+    }
+    .thanks { max-width: 23rem; margin: 0; font: 1rem/1.45 var(--sans); text-wrap: balance; }
+    .signature { margin: 0; color: var(--red); font: 600 italic clamp(1.12rem, 3.3vw, 1.45rem)/1.2 var(--serif); }
+    [data-state="opening"] .sleeve,
+    [data-state="opening"] .pocket-wrap,
+    [data-state="opening"] .lid-carrier { animation: sleeve-away var(--opening) ease-in-out both; }
+    [data-state="opening"] .lid { animation: lift-lid var(--opening) ease-in-out both; }
+    [data-state="opening"] .seal { animation: release-seal var(--opening) ease-out both; }
+    [data-state="opening"] .letter-slot { animation: draw-letter var(--opening) cubic-bezier(.4,0,.2,1) both; }
+    [data-state="opening"] .paper-turn { animation: turn-letter var(--opening) cubic-bezier(.45,.02,.24,1) both; }
+    [data-state="open"] .sleeve, [data-state="open"] .pocket-wrap, [data-state="open"] .lid-carrier { visibility: hidden; }
+    [data-state="open"] .letter-slot { z-index: 5; }
+    [data-state="open"] .paper-turn { transform: rotateY(-180deg); }
+    @keyframes lift-lid {
+      0%, 5% { transform: rotateX(0); }
+      41%, 100% { transform: rotateX(148deg); }
+    }
+    @keyframes release-seal {
+      0%, 6% { opacity: 1; }
+      24%, 100% { opacity: 0; }
+    }
+    @keyframes sleeve-away {
+      0%, 6% { transform: translateY(0); opacity: 1; }
+      40% { transform: translateY(23%); opacity: 1; }
+      61% { opacity: .7; }
+      74%, 100% { transform: translateY(43%); opacity: 0; }
+    }
+    @keyframes draw-letter {
+      0%, 15% { transform: translateY(2%) scale(.89); z-index: 2; opacity: 0; }
+      25% { opacity: 1; }
+      51% { transform: translateY(-21%) scale(.94); z-index: 2; }
+      52% { z-index: 5; }
+      100% { transform: none; z-index: 5; opacity: 1; }
+    }
+    @keyframes turn-letter {
+      0%, 42% { transform: rotateY(0); }
+      100% { transform: rotateY(-180deg); }
+    }
+    .controls { display: grid; justify-items: center; gap: .2rem; }
+    .hint { margin: 0; display: flex; justify-content: center; align-items: center; gap: .65rem; font-size: 1.05rem; font-weight: 650; line-height: 1.5; text-wrap: balance; }
+    .swipe { display: inline-block; position: relative; width: 2.5rem; height: 1rem; color: var(--red); flex: none; }
+    .swipe::before { content: ""; position: absolute; left: 2px; right: 4px; top: calc(50% - 1px); height: 2px; background: linear-gradient(90deg, currentColor 0 66%, transparent 66% 77%, currentColor 77% 86%, transparent 86% 93%, currentColor 93%); }
+    .swipe::after { content: ""; position: absolute; width: .52rem; height: .52rem; left: 2px; top: calc(50% - .26rem); border: solid currentColor; border-width: 0 0 2px 2px; transform: rotate(45deg); }
+    [data-state="open"] .swipe, [data-state="opening"] .swipe { display: none; }
+    .action {
+      color: var(--red); background: transparent; border: 0;
+      min-height: 44px; padding: .55rem .9rem; border-radius: 3px;
+      text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .26em;
+      font-weight: 600; font-size: 1rem; cursor: pointer;
+    }
+    .action[aria-disabled="true"] { cursor: default; }
+    @media (hover: hover) {
+      .action:not([aria-disabled="true"]):hover { background: #a638320c; }
+    }
+    .foot-rule {
+      width: min(calc(100% - 3rem), 62rem); height: .45rem; margin: 0 auto max(1.05rem, env(safe-area-inset-bottom));
+      background: var(--mail-stripe); opacity: .48; border-radius: 1px;
+    }
+    noscript { display: block; color: var(--red); font-weight: 600; margin: 1rem; }
+    @media (max-width: 780px) {
+      .puzzle-scrap { display: none; }
+    }
+    @media (max-width: 480px) {
+      .masthead, .foot-rule { width: calc(100% - 2.2rem); }
+      .desk { width: min(97%, 23rem); }
+      .intro { max-width: 19rem; font-size: 1rem; }
+      .thanks { max-width: 15rem; }
+      .card-label { font-size: .74rem; }
+      .hint { font-size: 1rem; gap: .45rem; }
+    }
+    @media (max-width: 350px) {
+      main { padding-inline: .8rem; }
+      .desk { aspect-ratio: 1.68; }
+      .swipe { width: 1.8rem; }
+    }
+    @media (max-height: 590px) and (min-width: 481px) {
+      main { padding-block: 1.3rem; }
+      .desk { max-width: 23rem; margin-block: 2.4rem 2rem; }
+      h1 { font-size: 3.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root { --opening: 1ms; }
+      .mail { transition: none; }
+      .dragging .mail { transform: rotate(-3deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="game" data-state="closed">
+    <header class="masthead">
+      <span class="brand" aria-label="Boo">Boo.</span>
+      <span class="occasion"><span class="tiles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Sinh nhật 2 tuổi</span>
+    </header>
+
+    <main>
+      <div class="puzzle-scrap scrap-left" aria-hidden="true"></div>
+      <div class="puzzle-scrap scrap-right" aria-hidden="true"></div>
+      <p class="eyebrow">Trò chơi ô chữ</p>
+      <h1>Bạn có <em>thư!</em></h1>
+      <p class="intro">Boo đã giấu từ khóa của ô chữ trong phong thư này.</p>
+
+      <div class="desk" id="desk">
+        <div class="mail">
+          <div class="sleeve" aria-hidden="true"></div>
+          <div class="letter-slot" id="letter" aria-hidden="true"></div>
+          <div class="pocket-wrap" aria-hidden="true">
+            <div class="pocket packet-grain"></div>
+            <div class="bottom-fold"></div>
+            <div class="stripe"></div>
+            <div class="address"><small>Gửi đến</small><b>Bạn của Boo</b></div>
+            <div class="stamp"><div class="stamp-art"><div class="cake"><i class="candle"></i><i class="candle"></i></div><span class="stamp-title">Boo</span></div></div>
+            <span class="cancel-lines"></span>
+            <div class="postmark"><span>02</span></div>
+          </div>
+          <div class="lid-carrier" aria-hidden="true">
+            <div class="lid"><div class="lid-paper"></div><div class="seal"><span>B</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <p class="hint"><span class="swipe" aria-hidden="true"></span><span id="hint">Vuốt phong thư từ phải sang trái</span></p>
+        <button type="button" class="action" id="action" aria-controls="letter" aria-expanded="false">Mở thư</button>
+      </div>
+      <p class="sr-only" id="announcement" role="status" aria-live="polite" aria-atomic="true"></p>
+      <noscript>Bạn hãy bật JavaScript trong trình duyệt rồi mở lại trang để đọc thư của Boo.</noscript>
+    </main>
+    <div class="foot-rule" aria-hidden="true"></div>
+  </div>
+
+  <template id="letter-template">
+    <article class="paper-turn" aria-labelledby="keyword">
+      <div class="paper-face paper-front" aria-hidden="true">Boo.</div>
+      <div class="paper-face paper-back">
+        <div class="card-content">
+          <p class="card-label">Từ khóa ô chữ</p>
+          <h2 class="keyword" id="keyword" tabindex="-1">ĐỒNG HÀNH</h2>
+          <p class="thanks">Sinh nhật hai tuổi của Boo vui hơn vì hôm nay có bạn!</p>
+          <p class="signature">Thương, Boo.</p>
+        </div>
+      </div>
+    </article>
+  </template>
+  <script>
+    (() => {
+      "use strict";
+      const game = document.getElementById("game");
+      const desk = document.getElementById("desk");
+      const letter = document.getElementById("letter");
+      const template = document.getElementById("letter-template");
+      const action = document.getElementById("action");
+      const hint = document.getElementById("hint");
+      const announcement = document.getElementById("announcement");
+      const closedHint = hint.textContent;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let drag = null;
+      let finishTimer = 0;
+
+      function releaseDrag() {
+        if (!drag) return;
+        const id = drag.id;
+        drag = null;
+        desk.classList.remove("dragging");
+        desk.style.removeProperty("--pull");
+        desk.style.removeProperty("--tilt");
+        if (desk.hasPointerCapture(id)) desk.releasePointerCapture(id);
+      }
+
+      function openLetter(fromKeyboard = false) {
+        if (game.dataset.state !== "closed") return;
+        releaseDrag();
+        letter.replaceChildren(template.content.cloneNode(true));
+        const card = letter.querySelector(".paper-turn");
+        game.dataset.state = "opening";
+        action.setAttribute("aria-disabled", "true");
+        hint.textContent = "Phong thư đang mở…";
+
+        function finish() {
+          if (game.dataset.state !== "opening") return;
+          window.clearTimeout(finishTimer);
+          card.removeEventListener("animationend", onTurnEnd);
+          game.dataset.state = "open";
+          letter.removeAttribute("aria-hidden");
+          action.setAttribute("aria-expanded", "true");
+          action.removeAttribute("aria-disabled");
+          action.textContent = "Gấp thư lại";
+          hint.textContent = "Điền từ khóa vào ô chữ trên phiếu nhé!";
+          const keyword = letter.querySelector(".keyword");
+          if (fromKeyboard) keyword.focus({ preventScroll: true });
+          else announcement.textContent = "Thư đã mở. Từ khóa là " + keyword.textContent + ".";
+        }
+        function onTurnEnd(event) {
+          if (event.target === card && event.animationName === "turn-letter") finish();
+        }
+        card.addEventListener("animationend", onTurnEnd);
+        // Some in-app browsers pause CSS animations while their tab is in the background.
+        finishTimer = window.setTimeout(finish, reduceMotion.matches ? 12 : 1900);
+      }
+
+      function closeLetter() {
+        window.clearTimeout(finishTimer);
+        releaseDrag();
+        game.dataset.state = "closed";
+        letter.setAttribute("aria-hidden", "true");
+        letter.replaceChildren();
+        announcement.textContent = "";
+        action.removeAttribute("aria-disabled");
+        action.setAttribute("aria-expanded", "false");
+        action.textContent = "Mở thư";
+        hint.textContent = closedHint;
+      }
+
+      desk.addEventListener("pointerdown", (event) => {
+        if (game.dataset.state !== "closed" || drag || !event.isPrimary || event.button !== 0) return;
+        drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        desk.setPointerCapture(event.pointerId);
+        desk.classList.add("dragging");
+      });
+      desk.addEventListener("pointermove", (event) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const distance = drag.x - event.clientX;
+        const vertical = Math.abs(drag.y - event.clientY);
+        if (vertical > 16 && vertical > Math.abs(distance) * 1.2) {
+          releaseDrag();
+          return;
+        }
+        const progress = Math.max(0, Math.min(1, distance / (desk.clientWidth * .33)));
+        desk.style.setProperty("--pull", (-12 * progress) + "px");
+        desk.style.setProperty("--tilt", (-2 * progress) + "deg");
+      });
+      desk.addEventListener("pointerup", (event) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const distance = drag.x - event.clientX;
+        const vertical = Math.abs(drag.y - event.clientY);
+        const threshold = Math.max(40, Math.min(78, desk.clientWidth * .16));
+        releaseDrag();
+        if (distance >= threshold && distance > vertical * 1.25) openLetter();
+      });
+      function cancelPointer(event) {
+        if (drag && event.pointerId === drag.id) releaseDrag();
+      }
+      desk.addEventListener("pointercancel", cancelPointer);
+      desk.addEventListener("lostpointercapture", cancelPointer);
+      action.addEventListener("click", (event) => {
+        if (game.dataset.state === "closed") openLetter(event.detail === 0);
+        else if (game.dataset.state === "open") closeLetter();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft" && !event.altKey && !event.metaKey && !event.ctrlKey && game.dataset.state === "closed") {
+          event.preventDefault();
+          openLetter(true);
+        }
+      });
+      window.addEventListener("pageshow", (event) => { if (event.persisted) closeLetter(); });
+    })();
+  </script>
+</body>
+</html>
